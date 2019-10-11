@@ -11,36 +11,45 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="shortcut icon" href="">
     <title>Trivia Game</title>
   </head>
   <body>
     <div class="page-bg"></div>
-        <div class="header text-center">
-        <h1 class="display-3 firstpage">Trivia Game</h1>
+        <div class="header text-center firstpage">
+        <h1 class="display-3">Trivia Game</h1>
         </div>
-        <div class="row text-center">
+    <div class="score-container">
+    </div>
+    <div class="row text-center secondpage">
         <div class="col-lg-8 col-centered">
             <div class="card">
                 <header>
-                    <h1 class="display-3 secondpage">Trivia Game</h1>
+                    <h1 class="display-3">Trivia Game</h1>
                 </header>
                 <div class="card-body">
                     <div class="jumbotron jumbotron-fluid">
                         <div class="container"></div>
                             <p class="card-text">
-                                <h4>Time Left: <span id="timeRemaining"></span></h4>
+                                <!--timer input here-->
+                                <h4>Time Left: <span id="timer"></span></h4>
                             </p>
+                            <!--questions input here-->
                             <p><h3><span id="question"></span></h3></p>
+                            <!--options are input here-->
                             <ul id="options"></ul>
-                            <button type="button" name="submitButton" id="submitButton" class="btn btn-primary btn-lg">Submit</button>
+                            
                         </div>
                     </div>
+                </div>
             </div>
-            <button type="button" class="btn btn-primary">Start Game</button>
         </div>
-      </div>
     </div>
-
+    <div class="row firstpage">
+            <div class="col-lg-8 col-centered text-center">
+                    <button type="button" name="startButton" id="startButton" class="btn btn-primary btn-lg">Start Game</button>
+            </div>
+    </div>
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
       integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -56,5 +65,6 @@
       integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
       crossorigin="anonymous"
     ></script>
+    <script src="assets/javascript/app.js"></script>
   </body>
 </html>
