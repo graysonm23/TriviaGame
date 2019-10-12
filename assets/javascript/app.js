@@ -18,7 +18,7 @@ var triviaGame = {
   correct: 0,
   incorrect: 0,
   unanswered: 0,
-  timer: 20,
+  timer: 3,
   timerOn: false,
   runningQuestionIndex: 0,
   timeLeft: "",
@@ -65,7 +65,7 @@ var triviaGame = {
   },
 
   renderQuestion: function() {
-    triviaGame.timer = 10;
+    triviaGame.timer = 3;
     $("#timer").text(triviaGame.timer);
 
     // to prevent timer speed up
@@ -87,29 +87,32 @@ var triviaGame = {
   },
 
   timerRunning: function() {
-    if (
-      triviaGame.timer > -1 &&
-      triviaGame.runningQuestionIndex < Object.keys(triviaGame.questions).length
-    ) {
+    if (triviaGame.timer > 0) {
       $("#timer").text(triviaGame.timer);
       triviaGame.timer--;
-      if (triviaGame.timer === 4) {
-        $("#timer").addClass("last-seconds");
-      }
-    } else if (triviaGame.timer === -1) {
+    }
+
+    if (
+      triviaGame.timer === 0 ||
+      triviaGame.runningQuestionIndex < Object.keys(triviaGame.questions).length
+    ) {
+      console.log("?", triviaGame.timer);
+      triviaGame.renderQuestion().bind(triviaGame);
       triviaGame.unanswered++;
-      triviaGame.result = false;
-      clearInterval(triviaGame.timerId);
-      resultId = setTimeout(triviaGame.answers, 1000);
       $(scoreContainer).html(
         "<h3>Out of time! The answer was " +
           Object.values(triviaGame.answers)[triviaGame.runningQuestionIndex] +
           "</h3>"
       );
-    } else if (
-      triviaGame.runningQuestionIndex ===
+      // clearInterval(triviaGame.timer);
+    }
+    if (
+      triviaGame.questions.runningQuestionIndex ===
       Object.keys(triviaGame.questions).length
     ) {
+      $(".secondpage").hide();
+
+      $(".firstpage").show();
       $(scoreContainer).html(
         "<h3>Thank you for playing!</h3>" +
           "<p>Correct: " +
@@ -123,19 +126,16 @@ var triviaGame = {
           "</p>" +
           "<p>Please play again!</p>"
       );
-
-      $(".secondpage").hide();
-
-      $(".firstpage").show();
     }
   },
+
   guessChecker: function() {
     // timer ID for gameResult setTimeout
-    var resultId;
+    // var resultId;
 
     // the answer to the current question being asked
     var currentAnswer = Object.values(triviaGame.answers)[
-      triviaGame.runningQuestionIndex
+      triviaGame.answers.runningQuestionIndex
     ];
 
     // answer matches the answer index
