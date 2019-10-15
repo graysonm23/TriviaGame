@@ -1,177 +1,376 @@
-$(document).ready(function() {
-  $(quizPage).hide();
-  $(scoreContainer).hide();
-  $("#startButton").on("click", triviaGame.startGame);
-  $(document).on("click", ".option", triviaGame.guessChecker);
-});
-var startGame = $("#startButton");
-var timeLeft = $("#timer");
-var quizPage = $(".secondpage");
-var introPage = $(".firstpage");
-var question = $("#question");
-var optionA = $("#A");
-var optionB = $("#B");
-var optionC = $("#C");
-var optionD = $("#D");
-var scoreContainer = $(".score-container");
-var triviaGame = {
-  correct: 0,
-  incorrect: 0,
-  unanswered: 0,
-  timer: 3,
-  timerOn: false,
-  runningQuestionIndex: 0,
-  timeLeft: "",
-  questions: {
-    q1: "How many people live in the state of New York?",
-    q2: "What is the tallest building in New York?",
-    q3: "How many billionaires live in New York City?",
-    q4: "How many different languages are spoken in New York?",
-    q5: "What is the monthly cost to park a car in New York City?",
-    q6: "Where does the term 'Big Apple' come from originally?"
-  },
-  options: {
-    q1: ["1 Million", "7 Million", "18 Million", "24 Million"],
-    q2: [
-      "Four World Trade Center",
-      "Empire State",
-      "432 Park Condominiums",
-      "One World Trade Center"
-    ],
-    q3: ["50", "100", "200", "500"],
-    q4: ["800", "1000", "60", "250"],
-    q5: ["$30", "$90", "$350", "$600"],
-    q6: ["Olympics", "Millionaires", "Horse Racing", "Tourism"]
-  },
-  answers: {
-    q1: ["18 Million"],
-    q2: ["One World Trade Center"],
-    q3: ["100"],
-    q4: ["800"],
-    q5: ["$600"],
-    q6: ["Horse Racing"]
-  },
+(function() {
+  let arr = [$("#optionA"), $("#optionB"), $("#optionC"), $("#optionD")];
+  let randArr = arr[Math.floor(arr.length * Math.random())];
+  let btnNext = $("#btnNext");
+  let answer = randArr;
+  let question = "";
+  let answerReal;
+  let optionA = $("#optionA");
+  let optionB = $("#optionB");
+  let optionC = $("#optionC");
+  let optionD = $("#optionD");
+  var count = 0;
+  let correct = 0;
+  let incorrect = 0;
+  let unanswered = 0;
+  let timeLeft = $("#timer");
+  let time = 20;
+  let interval;
+  optionA.hide();
+  optionB.hide();
+  optionC.hide();
+  optionD.hide();
 
-  startGame: function() {
-    triviaGame.correct = 0;
-    triviaGame.incorrect = 0;
-    triviaGame.unanswered = 0;
-    triviaGame.runningQuestionIndex = 0;
-    clearInterval(triviaGame.timeLeft);
-    introPage.hide();
-    quizPage.show();
-    timeLeft.text(triviaGame.timer);
-    triviaGame.renderQuestion();
-  },
+  //   var interval = setInterval(function() {
+  //     time--;
+  //     timeLeft = time;
+  //     console.log(time);
+  //     if (time === 0) {
+  //       clearInterval(interval);
+  //       unanswered++;
+  //       $("#unanswered").text(unanswered);
+  //       renderQuestion();
+  //     }
+  //   }, 1000);
 
-  renderQuestion: function() {
-    triviaGame.timer = 3;
-    $("#timer").text(triviaGame.timer);
+  function startGame() {
+    $(btnNext).on("click", function nextQuestion() {
+      $(".timer").attr("id", "timer");
+      timerRun();
+      optionA.show();
+      optionB.show();
+      optionC.show();
+      optionD.show();
+      btnNext.hide();
+      //   console.log(count);
+      if (count === 10) {
+        $("#container").hide();
+        $("#score").show();
+      }
+      //   function shuffle() {  //---------this function was called to randomize my array(var arr), however it's not needed---
+      //     var currentarr = arr.length;
+      //     var index, temp;
 
-    // to prevent timer speed up
-    if (!triviaGame.timerOn) {
-      triviaGame.timerId = setInterval(triviaGame.timerRunning, 1000);
-    }
-    var questionContent = Object.values(triviaGame.questions)[
-      triviaGame.runningQuestionIndex
-    ];
-    $("#question").text(questionContent);
-    var questionOptions = Object.values(triviaGame.options)[
-      triviaGame.runningQuestionIndex
-    ];
-    $.each(questionOptions, function(index, key) {
-      $("#options").append(
-        $('<button class="option btn btn-info btn-lg">' + key + "</button>")
-      );
+      //     while (currentarr > 0) {
+      //       index = Math.floor(Math.random() * currentarr);
+      //       currentarr--;
+
+      //       temp = arr[currentarr];
+      //       arr[currentarr] = arr[index];
+      //       arr[index] = temp;
+      //     }
+      //   }
+      (function($) {
+        //-----------------this function shuffles all the DOM elements after its been called (look down below)------------
+        $.fn.shuffle = function() {
+          var allElems = this.get(),
+            getRandom = function(max) {
+              return Math.floor(Math.random() * max);
+            },
+            shuffled = $.map(allElems, function() {
+              var random = getRandom(allElems.length),
+                randEl = $(allElems[random]).clone(true)[0];
+              allElems.splice(random, 1);
+              return randEl;
+            });
+
+          this.each(function(i) {
+            $(this).replaceWith($(shuffled[i]));
+          });
+
+          return $(shuffled);
+        };
+      })(jQuery);
+      //-----------------------here we call the DOM elements to be shuffled---------------------------------------------------
+      $("#answers button").shuffle();
+      fetch("http://jservice.io/api/random")
+        .then(function(response) {
+          if (response.status !== 200) {
+            console.log(
+              "Looks like there was a problem. Status Code: " + response.status
+            );
+            return;
+          }
+
+          // Examine the text in the response
+          response.json().then(function(data) {
+            //------------------------------FETCHING THE API----------------------------------------------
+            console.log(data);
+            answerReal = data[0].answer;
+            question = data[0].question;
+            console.log(question + ": " + answer);
+            $("#question").html(question);
+            // shuffle($("#answers"));
+            console.log(arr);
+            $("#optionA").html(answerReal);
+            $("#optionA").addClass("secretwinner");
+            console.log(answerReal);
+          });
+        })
+        .catch(function(err) {
+          console.log("Fetch Error :-S", err);
+        });
+      fetch("http://jservice.io/api/random")
+        .then(function(response) {
+          if (response.status !== 200) {
+            console.log(
+              "Looks like there was a problem. Status Code: " + response.status
+            );
+            return;
+          }
+
+          // Examine the text in the response
+          response.json().then(function(data) {
+            console.log(data);
+            answerNonReal = data[0].answer;
+            $("#optionB").html(answerNonReal);
+            $("#optionB").addClass("notasecretwinner");
+            console.log(answerNonReal); //-----------------------------FETCHING THE API----------------------------------------
+          });
+        })
+        .catch(function(err) {
+          console.log("Fetch Error :-S", err);
+        });
+      fetch("http://jservice.io/api/random")
+        .then(function(response) {
+          if (response.status !== 200) {
+            console.log(
+              "Looks like there was a problem. Status Code: " + response.status
+            );
+            return;
+          }
+
+          // Examine the text in the response
+          response.json().then(function(data) {
+            console.log(data);
+            answerNonReal = data[0].answer;
+            $("#optionC").html(answerNonReal);
+            $("#optionC").addClass("notasecretwinner");
+            console.log(answerNonReal); //------------------------------FETCHING THE API---------------------------------------
+          });
+        })
+        .catch(function(err) {
+          console.log("Fetch Error :-S", err);
+        });
+      fetch("http://jservice.io/api/random")
+        .then(function(response) {
+          if (response.status !== 200) {
+            console.log(
+              "Looks like there was a problem. Status Code: " + response.status
+            );
+            return;
+          }
+
+          // Examine the text in the response
+          response.json().then(function(data) {
+            console.log(data);
+            answerNonReal = data[0].answer;
+            $("#optionD").html(answerNonReal);
+            $("#optionD").addClass("notasecretwinner");
+            console.log(answerNonReal); //-------------------------------FETCHING THE API--------------------------------------
+          });
+        })
+        .catch(function(err) {
+          console.log("Fetch Error :-S", err);
+        });
     });
-  },
-
-  timerRunning: function() {
-    if (triviaGame.timer > 0) {
-      $("#timer").text(triviaGame.timer);
-      triviaGame.timer--;
+  } //---------------------------------------------------------END-------------------------------------------------------------
+  function renderQuestion() {
+    clearInterval(interval);
+    timerRun();
+    count++;
+    console.log(count);
+    if (count === 10) {
+      timer = 0;
+      console.log(typeof interval);
+      clearInterval(interval);
+      $("#container").hide();
+      $("#score").show();
     }
+    (function($) {
+      //-----------------this function shuffles all the DOM elements after its been called (look down below)------------
+      $.fn.shuffle = function() {
+        var allElems = this.get(),
+          getRandom = function(max) {
+            return Math.floor(Math.random() * max);
+          },
+          shuffled = $.map(allElems, function() {
+            var random = getRandom(allElems.length),
+              randEl = $(allElems[random]).clone(true)[0];
+            allElems.splice(random, 1);
+            return randEl;
+          });
 
-    if (
-      triviaGame.timer === 0 ||
-      triviaGame.runningQuestionIndex < Object.keys(triviaGame.questions).length
-    ) {
-      console.log("?", triviaGame.timer);
-      triviaGame.renderQuestion().bind(triviaGame);
-      triviaGame.unanswered++;
-      $(scoreContainer).html(
-        "<h3>Out of time! The answer was " +
-          Object.values(triviaGame.answers)[triviaGame.runningQuestionIndex] +
-          "</h3>"
-      );
-      // clearInterval(triviaGame.timer);
-    }
-    if (
-      triviaGame.questions.runningQuestionIndex ===
-      Object.keys(triviaGame.questions).length
-    ) {
-      $(".secondpage").hide();
+        this.each(function(i) {
+          $(this).replaceWith($(shuffled[i]));
+        });
 
-      $(".firstpage").show();
-      $(scoreContainer).html(
-        "<h3>Thank you for playing!</h3>" +
-          "<p>Correct: " +
-          triviaGame.correct +
-          "</p>" +
-          "<p>Incorrect: " +
-          triviaGame.incorrect +
-          "</p>" +
-          "<p>Unaswered: " +
-          triviaGame.unanswered +
-          "</p>" +
-          "<p>Please play again!</p>"
-      );
-    }
-  },
+        return $(shuffled);
+      };
+    })(jQuery);
+    //-----------------------here we call the DOM elements to be shuffled---------------------------------------------------
+    $("#answers button").shuffle();
+    fetch("http://jservice.io/api/random")
+      .then(function(response) {
+        if (response.status !== 200) {
+          console.log(
+            "Looks like there was a problem. Status Code: " + response.status
+          );
+          return;
+        }
 
-  guessChecker: function() {
-    // timer ID for gameResult setTimeout
-    // var resultId;
+        // Examine the text in the response
+        response.json().then(function(data) {
+          //------------------------------FETCHING THE API----------------------------------------------
+          console.log(data);
+          answerReal = data[0].answer;
+          question = data[0].question;
+          console.log(question + ": " + answer);
+          $("#question").html(question);
+          console.log(arr);
+          $("#optionA").html(answerReal);
+          $("#optionA").addClass("secretwinner");
+          console.log(answerReal);
+        });
+      })
+      .catch(function(err) {
+        console.log("Fetch Error :-S", err);
+      });
+    fetch("http://jservice.io/api/random")
+      .then(function(response) {
+        if (response.status !== 200) {
+          console.log(
+            "Looks like there was a problem. Status Code: " + response.status
+          );
+          return;
+        }
 
-    // the answer to the current question being asked
-    var currentAnswer = Object.values(triviaGame.answers)[
-      triviaGame.answers.runningQuestionIndex
-    ];
+        // Examine the text in the response
+        response.json().then(function(data) {
+          console.log(data);
+          answerNonReal = data[0].answer;
+          $("#optionB").html(answerNonReal);
+          $("#optionB").addClass("notasecretwinner");
+          console.log(answerNonReal); //-----------------------------FETCHING THE API----------------------------------------
+        });
+      })
+      .catch(function(err) {
+        console.log("Fetch Error :-S", err);
+      });
+    fetch("http://jservice.io/api/random")
+      .then(function(response) {
+        if (response.status !== 200) {
+          console.log(
+            "Looks like there was a problem. Status Code: " + response.status
+          );
+          return;
+        }
 
-    // answer matches the answer index
-    if ($(this).text() === currentAnswer) {
-      // turn button green for correct
-      $(this)
-        .addClass("btn-success")
-        .removeClass("btn-info");
+        // Examine the text in the response
+        response.json().then(function(data) {
+          console.log(data);
+          answerNonReal = data[0].answer;
+          $("#optionC").html(answerNonReal);
+          $("#optionC").addClass("notasecretwinner");
+          console.log(answerNonReal); //------------------------------FETCHING THE API---------------------------------------
+        });
+      })
+      .catch(function(err) {
+        console.log("Fetch Error :-S", err);
+      });
+    fetch("http://jservice.io/api/random")
+      .then(function(response) {
+        if (response.status !== 200) {
+          console.log(
+            "Looks like there was a problem. Status Code: " + response.status
+          );
+          return;
+        }
 
-      triviaGame.correct++;
-      clearInterval(triviaGame.timerId);
-      resultId = setTimeout(triviaGame.guessResult, 1000);
-      $("#results").html("<h3>Correct Answer!</h3>");
-    } else {
-      // turn button clicked red for incorrect
-      $(this)
-        .addClass("btn-danger")
-        .removeClass("btn-info");
-
-      triviaGame.incorrect++;
-      clearInterval(triviaGame.timerId);
-      resultId = setTimeout(triviaGame.guessResult, 1000);
-      $(scoreContainer).html(
-        "<h3>Better luck next time! " + currentAnswer + "</h3>"
-      );
-    }
-  },
-  guessResult: function() {
-    // increment to next question set
-    triviaGame.runningQuestionIndex++;
-
-    // remove the options and results
-    $(".option").remove();
-    $(scoreContainer).remove();
-
-    // begin next question
-    triviaGame.renderQuestion();
+        // Examine the text in the response
+        response.json().then(function(data) {
+          console.log(data);
+          answerNonReal = data[0].answer;
+          $("#optionD").html(answerNonReal);
+          $("#optionD").addClass("notasecretwinner");
+          console.log(answerNonReal); //-------------------------------FETCHING THE API--------------------------------------
+        });
+      })
+      .catch(function(err) {
+        console.log("Fetch Error :-S", err);
+      });
   }
-};
+  startGame();
+  $("#score").hide();
+  startAnswers();
+  function timerRun() {
+    interval = setInterval(function() {
+      time--;
+      $(timeLeft).text(time);
+      console.log(time);
+      if (time === 0) {
+        unanswered++;
+        $("#unanswered").text(unanswered);
+        resetTime();
+        renderQuestion();
+      } else if (count === 10) {
+        console.log(count);
+        clearInterval(interval);
+      }
+    }, 1000);
+  }
+  function stopTimers() {
+    clearInterval(interval);
+  }
+  function resetTime() {
+    stopTimers();
+    time = 20;
+    $(timeLeft).text(time);
+  }
+  function startAnswers() {
+    $(optionA).on("click", function() {
+      console.log("this is the correct button");
+      console.log("this button is being clicked A");
+      correct++;
+      $("#correct").text(correct);
+      $("#optionA").addClass("correct-button");
+      $("#optionA").removeClass("correct-button");
+      renderQuestion();
+      resetTime();
+      timerRun();
+    });
+    $(optionB).on("click", function() {
+      console.log("wrong button");
+      console.log("this button is being clicked B");
+      incorrect++;
+      $("#incorrect").text(incorrect);
+      $("#optionB").addClass("incorrect-button");
+      $("#optionB").removeClass("incorrect-button");
+      renderQuestion();
+      resetTime();
+      timerRun();
+    });
+    $(optionC).on("click", function() {
+      console.log("wrong button 2");
+      console.log("this button is being clicked C");
+      incorrect++;
+      $("#incorrect").text(incorrect);
+      $("#optionC").addClass("incorrect-button");
+      $("#optionC").removeClass("incorrect-button");
+      renderQuestion();
+      resetTime();
+      timerRun();
+    });
+    $(optionD).on("click", function() {
+      console.log("wrong button 3");
+      console.log("this button is being clicked D");
+      incorrect++;
+      $("#incorrect").text(incorrect);
+      $("#optionD").addClass("incorrect-button");
+      $("#optionD").removeClass("incorrect-button");
+      renderQuestion();
+      resetTime();
+      timerRun();
+    });
+  }
+})();
