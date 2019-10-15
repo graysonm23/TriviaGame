@@ -27,6 +27,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  text-align: center;
 }
 
 .correct-button {
@@ -54,14 +55,11 @@
 }
 
 #time {
-  position: absolute;
   mix-blend-mode: color;
   color: antiquewhite;
   font-size: 36px;
-  top: 0%;
-  left: 8%;
 }
 
 #question {
-  padding: 20px;
+  padding: 20%;
 }
