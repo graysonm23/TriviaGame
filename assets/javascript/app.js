@@ -83,7 +83,9 @@
       })(jQuery);
       //-----------------------here we call the DOM elements to be shuffled---------------------------------------------------
       $("#answers button").shuffle();
-      fetch("https://jservice.io/api/random")
+      fetch(
+        "https://opentdb.com/api.php?amount=1&category=18&difficulty=hard&type=multiple"
+      )
         .then(function(response) {
           if (response.status !== 200) {
             console.log(
@@ -96,8 +98,8 @@
           response.json().then(function(data) {
             //------------------------------FETCHING THE API----------------------------------------------
             console.log(data);
-            answerReal = data[0].answer;
-            question = data[0].question;
+            answerReal = data.results[0].correct_answer;
+            question = data.results[0].question;
             console.log(question + ": " + answer);
             $("#question").html(question);
             // shuffle($("#answers"));
@@ -110,7 +112,9 @@
         .catch(function(err) {
           console.log("Fetch Error :-S", err);
         });
-      fetch("https://jservice.io/api/random")
+      fetch(
+        "https://opentdb.com/api.php?amount=1&category=18&difficulty=hard&type=multiple"
+      )
         .then(function(response) {
           if (response.status !== 200) {
             console.log(
@@ -122,7 +126,7 @@
           // Examine the text in the response
           response.json().then(function(data) {
             console.log(data);
-            answerNonReal = data[0].answer;
+            answerNonReal = data.results[0].correct_answer;
             $("#optionB").html(answerNonReal);
             $("#optionB").addClass("notasecretwinner");
             console.log(answerNonReal); //-----------------------------FETCHING THE API----------------------------------------
@@ -131,7 +135,9 @@
         .catch(function(err) {
           console.log("Fetch Error :-S", err);
         });
-      fetch("https://jservice.io/api/random")
+      fetch(
+        "https://opentdb.com/api.php?amount=1&category=18&difficulty=hard&type=multiple"
+      )
         .then(function(response) {
           if (response.status !== 200) {
             console.log(
@@ -143,7 +149,7 @@
           // Examine the text in the response
           response.json().then(function(data) {
             console.log(data);
-            answerNonReal = data[0].answer;
+            answerNonReal = data.results[0].correct_answer;
             $("#optionC").html(answerNonReal);
             $("#optionC").addClass("notasecretwinner");
             console.log(answerNonReal); //------------------------------FETCHING THE API---------------------------------------
@@ -152,7 +158,9 @@
         .catch(function(err) {
           console.log("Fetch Error :-S", err);
         });
-      fetch("https://jservice.io/api/random")
+      fetch(
+        "https://opentdb.com/api.php?amount=1&category=18&difficulty=hard&type=multiple"
+      )
         .then(function(response) {
           if (response.status !== 200) {
             console.log(
@@ -164,7 +172,7 @@
           // Examine the text in the response
           response.json().then(function(data) {
             console.log(data);
-            answerNonReal = data[0].answer;
+            answerNonReal = data.results[0].correct_answer;
             $("#optionD").html(answerNonReal);
             $("#optionD").addClass("notasecretwinner");
             console.log(answerNonReal); //-------------------------------FETCHING THE API--------------------------------------
@@ -210,7 +218,9 @@
     })(jQuery);
     //-----------------------here we call the DOM elements to be shuffled---------------------------------------------------
     $("#answers button").shuffle();
-    fetch("https://jservice.io/api/random")
+    fetch(
+      "https://opentdb.com/api.php?amount=1&category=18&difficulty=hard&type=multiple"
+    )
       .then(function(response) {
         if (response.status !== 200) {
           console.log(
@@ -223,8 +233,8 @@
         response.json().then(function(data) {
           //------------------------------FETCHING THE API----------------------------------------------
           console.log(data);
-          answerReal = data[0].answer;
-          question = data[0].question;
+          answerReal = data.results[0].correct_answer;
+          question = data.results[0].question;
           console.log(question + ": " + answer);
           $("#question").html(question);
           console.log(arr);
@@ -236,7 +246,9 @@
       .catch(function(err) {
         console.log("Fetch Error :-S", err);
       });
-    fetch("https://jservice.io/api/random")
+    fetch(
+      "https://opentdb.com/api.php?amount=1&category=18&difficulty=hard&type=multiple"
+    )
       .then(function(response) {
         if (response.status !== 200) {
           console.log(
@@ -248,7 +260,7 @@
         // Examine the text in the response
         response.json().then(function(data) {
           console.log(data);
-          answerNonReal = data[0].answer;
+          answerNonReal = data.results[0].correct_answer;
           $("#optionB").html(answerNonReal);
           $("#optionB").addClass("notasecretwinner");
           console.log(answerNonReal); //-----------------------------FETCHING THE API----------------------------------------
@@ -257,7 +269,9 @@
       .catch(function(err) {
         console.log("Fetch Error :-S", err);
       });
-    fetch("https://jservice.io/api/random")
+    fetch(
+      "https://opentdb.com/api.php?amount=1&category=18&difficulty=hard&type=multiple"
+    )
       .then(function(response) {
         if (response.status !== 200) {
           console.log(
@@ -269,7 +283,7 @@
         // Examine the text in the response
         response.json().then(function(data) {
           console.log(data);
-          answerNonReal = data[0].answer;
+          answerNonReal = data.results[0].correct_answer;
           $("#optionC").html(answerNonReal);
           $("#optionC").addClass("notasecretwinner");
           console.log(answerNonReal); //------------------------------FETCHING THE API---------------------------------------
@@ -278,7 +292,9 @@
       .catch(function(err) {
         console.log("Fetch Error :-S", err);
       });
-    fetch("https://jservice.io/api/random")
+    fetch(
+      "https://opentdb.com/api.php?amount=1&category=18&difficulty=hard&type=multiple"
+    )
       .then(function(response) {
         if (response.status !== 200) {
           console.log(
@@ -290,7 +306,7 @@
         // Examine the text in the response
         response.json().then(function(data) {
           console.log(data);
-          answerNonReal = data[0].answer;
+          answerNonReal = data.results[0].correct_answer;
           $("#optionD").html(answerNonReal);
           $("#optionD").addClass("notasecretwinner");
           console.log(answerNonReal); //-------------------------------FETCHING THE API--------------------------------------
