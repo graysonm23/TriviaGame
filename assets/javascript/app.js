@@ -83,7 +83,7 @@
       })(jQuery);
       //-----------------------here we call the DOM elements to be shuffled---------------------------------------------------
       $("#answers button").shuffle();
-      fetch("http://jservice.io/api/random")
+      fetch("https://jservice.io/api/random")
         .then(function(response) {
           if (response.status !== 200) {
             console.log(
@@ -110,7 +110,7 @@
         .catch(function(err) {
           console.log("Fetch Error :-S", err);
         });
-      fetch("http://jservice.io/api/random")
+      fetch("https://jservice.io/api/random")
         .then(function(response) {
           if (response.status !== 200) {
             console.log(
@@ -131,7 +131,7 @@
         .catch(function(err) {
           console.log("Fetch Error :-S", err);
         });
-      fetch("http://jservice.io/api/random")
+      fetch("https://jservice.io/api/random")
         .then(function(response) {
           if (response.status !== 200) {
             console.log(
@@ -152,7 +152,7 @@
         .catch(function(err) {
           console.log("Fetch Error :-S", err);
         });
-      fetch("http://jservice.io/api/random")
+      fetch("https://jservice.io/api/random")
         .then(function(response) {
           if (response.status !== 200) {
             console.log(
@@ -210,7 +210,7 @@
     })(jQuery);
     //-----------------------here we call the DOM elements to be shuffled---------------------------------------------------
     $("#answers button").shuffle();
-    fetch("http://jservice.io/api/random")
+    fetch("https://jservice.io/api/random")
       .then(function(response) {
         if (response.status !== 200) {
           console.log(
@@ -236,7 +236,7 @@
       .catch(function(err) {
         console.log("Fetch Error :-S", err);
       });
-    fetch("http://jservice.io/api/random")
+    fetch("https://jservice.io/api/random")
       .then(function(response) {
         if (response.status !== 200) {
           console.log(
@@ -257,7 +257,7 @@
       .catch(function(err) {
         console.log("Fetch Error :-S", err);
       });
-    fetch("http://jservice.io/api/random")
+    fetch("https://jservice.io/api/random")
       .then(function(response) {
         if (response.status !== 200) {
           console.log(
@@ -278,7 +278,7 @@
       .catch(function(err) {
         console.log("Fetch Error :-S", err);
       });
-    fetch("http://jservice.io/api/random")
+    fetch("https://jservice.io/api/random")
       .then(function(response) {
         if (response.status !== 200) {
           console.log(
